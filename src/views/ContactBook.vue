@@ -16,9 +16,12 @@
                 <button class="btn btn-sm btn-primary" @click="refreshList">
                     <i class="fas fa-redo"></i> Làm mới
                 </button>
-                <button class="btn btn-sm btn-success" @click="goToAddContact">
-                    <i class="fas fa-plus"></i> Thêm mới
-                </button>
+                <!-- Thay đổi nút Thêm mới thành router-link -->
+                <router-link :to="{ name: 'contact.add' }">
+                    <button class="btn btn-sm btn-success">
+                        <i class="fas fa-plus"></i> Thêm mới
+                    </button>
+                </router-link>
                 <button class="btn btn-sm btn-danger" @click="removeAllContacts">
                     <i class="fas fa-trash"></i> Xóa tất cả
                 </button>
@@ -70,32 +73,27 @@ export default {
         },
     },
     computed: {
-        // Chuyển contact thành chuỗi để tìm kiếm
         contactStrings() {
             return this.contacts.map((contact) => {
                 const { name, email, address, phone } = contact;
                 return [name, email, address, phone].join("");
             });
         },
-        
         filteredContacts() {
             if (!this.searchText) return this.contacts;
             return this.contacts.filter((_contact, index) =>
                 this.contactStrings[index].includes(this.searchText)
             );
         },
-       
         activeContact() {
             if (this.activeIndex < 0) return null;
             return this.filteredContacts[this.activeIndex];
         },
-       
         filteredContactsCount() {
             return this.filteredContacts.length;
         },
     },
     methods: {
-    
         async retrieveContacts() {
             try {
                 this.contacts = await ContactService.getAll();
@@ -103,12 +101,10 @@ export default {
                 console.error("Lỗi khi tải danh bạ:", error);
             }
         },
-
         refreshList() {
             this.retrieveContacts();
             this.activeIndex = -1;
         },
-    
         async removeAllContacts() {
             if (confirm("Bạn muốn xóa tất cả Liên hệ?")) {
                 try {
@@ -118,9 +114,6 @@ export default {
                     console.error("Lỗi khi xóa danh bạ:", error);
                 }
             }
-        },
-        goToAddContact() {
-            this.$router.push({ name: "contact.add" });
         },
     },
     mounted() {

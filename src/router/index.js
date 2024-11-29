@@ -8,10 +8,15 @@ const routes = [
     component: ContactBook,
   },
   {
-    path: "/contacts/:id", // Định nghĩa route với tham số 'id'
-    name: "contact.edit", // Tên route cho trang sửa liên hệ
-    component: () => import("@/views/ContactEdit.vue"), // Lấy component 'ContactEdit' qua import
-    props: true, // Truyền các biến trong $route.params vào làm props cho component
+    path: "/contacts/add", // Định nghĩa route cho trang thêm liên hệ
+    name: "contact.add", // Đặt tên cho route
+    component: () => import("@/views/ContactAdd.vue"), // Import trang ContactAdd.vue
+  },
+  {
+    path: "/contacts/:id", 
+    name: "contact.edit", 
+    component: () => import("@/views/ContactEdit.vue"), 
+    props: true, 
   },
   {
     path: "/:pathMatch(.*)*",
