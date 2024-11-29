@@ -31,6 +31,14 @@
                     <i class="fas fa-address-card"></i>
                 </h4>
                 <ContactCard :contact="activeContact" />
+                <router-link :to="{
+                    name: 'contact.edit',
+                    params: { id: activeContact._id },
+                }">
+                    <span class="mt-2 badge badge-warning">
+                        <i class="fas fa-edit"></i> Hiệu chỉnh
+                    </span>
+                </router-link>
             </div>
         </div>
     </div>
@@ -69,25 +77,25 @@ export default {
                 return [name, email, address, phone].join("");
             });
         },
-        // Danh sách liên hệ sau khi lọc
+        
         filteredContacts() {
             if (!this.searchText) return this.contacts;
             return this.contacts.filter((_contact, index) =>
                 this.contactStrings[index].includes(this.searchText)
             );
         },
-        // Liên hệ đang được chọn
+       
         activeContact() {
             if (this.activeIndex < 0) return null;
             return this.filteredContacts[this.activeIndex];
         },
-        // Tổng số lượng liên hệ sau khi lọc
+       
         filteredContactsCount() {
             return this.filteredContacts.length;
         },
     },
     methods: {
-        // Lấy danh sách liên hệ từ server
+    
         async retrieveContacts() {
             try {
                 this.contacts = await ContactService.getAll();
@@ -95,12 +103,12 @@ export default {
                 console.error("Lỗi khi tải danh bạ:", error);
             }
         },
-        // Làm mới danh sách liên hệ
+
         refreshList() {
             this.retrieveContacts();
             this.activeIndex = -1;
         },
-        // Xóa tất cả liên hệ
+    
         async removeAllContacts() {
             if (confirm("Bạn muốn xóa tất cả Liên hệ?")) {
                 try {
@@ -111,13 +119,11 @@ export default {
                 }
             }
         },
-        // Điều hướng đến trang thêm liên hệ
         goToAddContact() {
             this.$router.push({ name: "contact.add" });
         },
     },
     mounted() {
-        // Tải danh bạ khi component được mount
         this.refreshList();
     },
 };
